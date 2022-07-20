@@ -23,7 +23,7 @@ export const renderName = (userName: string, isAdmin: boolean) => (
   // </span>
   <Link to={`/user/${userName}`}>
     <span
-      className={`hover:underline hover:font-bold ${
+      className={`hover:font-bold ${
         isAdmin
           ? "text-red-700 decoration-red-700"
           : "hover:text-sky-500 decoration-sky-500"

@@ -1,0 +1,2 @@
+export const THOUGHT_TITLE_LENGTH = 52;
+export const THOUGHT_TEXT_LENGTH = 1024;
