@@ -8,10 +8,12 @@ import {
   getUserByName,
   GetUserByNameEnsured,
 } from "~/utils/session.server";
+import { hasThoughtToday } from "~/utils/thoughts.server";
 
 interface LoaderPayload {
   user?: GetUser;
   requestedUser?: GetUserByNameEnsured;
+  thoughtToday: boolean;
   isMyProfile: boolean;
 }
 
@@ -19,6 +21,7 @@ export const loader: LoaderFunction = async ({ params, request }) => {
   const data: LoaderPayload = {};
   const requestedUserName = params.userName;
   const user = await getUser(request);
+  let thoughtToday = false;
   let isMyProfile = false;
 
   if (requestedUserName) {
@@ -30,6 +33,8 @@ export const loader: LoaderFunction = async ({ params, request }) => {
 
   if (user) {
     data.user = user;
+    thoughtToday = await hasThoughtToday(user.id);
+    data.thoughtToday = thoughtToday;
     if (requestedUserName === user.userName) {
       isMyProfile = true;
     }
@@ -49,7 +54,11 @@ export default function ProfileController() {
       }`}
       user={data.user}
     >
-      <ProfilePage user={data.requestedUser} />
+      <ProfilePage
+        user={data.requestedUser}
+        isMyProfile={data.isMyProfile}
+        thoughtToday={data.thoughtToday}
+      />
     </Layout>
   );
 }

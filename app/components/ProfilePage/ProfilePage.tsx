@@ -2,14 +2,21 @@ import React from "react";
 
 import { GetUserByNameEnsured } from "~/utils/session.server";
 import { renderDate, renderName } from "~/utils/user.common";
+import EmptyThought from "../Thoughts/EmptyThought";
 
 import Thought from "../Thoughts/Thought";
 
 interface ProfilePageProps {
   user: GetUserByNameEnsured | undefined;
+  isMyProfile: boolean;
+  thoughtToday: boolean;
 }
 
-export default function ProfilePage({ user }: ProfilePageProps) {
+export default function ProfilePage({
+  user,
+  thoughtToday,
+  isMyProfile,
+}: ProfilePageProps) {
   if (!user) {
     return <div>User does not exist</div>;
   }
@@ -32,7 +39,11 @@ export default function ProfilePage({ user }: ProfilePageProps) {
               {renderDate(new Date(user.createdAt))}
             </p>
           </div>
+
           <div>
+            {!thoughtToday && isMyProfile ? (
+              <EmptyThought user={user} className="mb-12" />
+            ) : null}
             {user.thoughts.map((thought) => (
               <Thought className="mb-6" key={thought.id} thought={thought} />
             ))}
