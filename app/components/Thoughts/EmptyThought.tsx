@@ -1,12 +1,14 @@
 import React, { useEffect, useState } from "react";
-import { useFetcher } from "remix";
+import { useFetcher, useLoaderData } from "remix";
 
-import { renderDate, renderName } from "~/utils/user.common";
 import { GetUserByNameEnsured } from "~/utils/session.server";
 import Input from "../Inputs/Input";
 import TextArea from "../Inputs/TextArea";
-import { THOUGHT_TEXT_LENGTH, THOUGHT_TITLE_LENGTH } from "./consts";
+import { THOUGHT_TEXT_LENGTH, THOUGHT_TITLE_LENGTH } from "~/utils/consts";
 import { ThoughtPostAction } from "~/routes/post";
+
+import { ProfilePageLoaderPayload } from "~/routes/user/$userName";
+import { renderDate, renderName } from "~/utils/common";
 
 type EmptyThoughtProps = {
   user: GetUserByNameEnsured;
@@ -18,6 +20,7 @@ export default function EmptyThought({
   className = "",
   user,
 }: EmptyThoughtProps) {
+  const loaderData = useLoaderData<ProfilePageLoaderPayload>();
   const fetcher = useFetcher();
   const [data, setData] = useState<ThoughtPostAction>();
 
@@ -27,16 +30,10 @@ export default function EmptyThought({
     }
   }, [fetcher.data]);
 
-  const thoughtDate = renderDate(new Date());
-  let latestThoughtNumber = 0;
-
-  user.thoughts.forEach((thought) => {
-    if (thought.thoughtNumber > latestThoughtNumber) {
-      latestThoughtNumber = thought.thoughtNumber;
-    }
-  });
-
+  let { latestThoughtNumber } = loaderData;
   latestThoughtNumber += 1;
+
+  const thoughtDate = renderDate(new Date());
 
   return (
     <fetcher.Form method="post" action="/post">
