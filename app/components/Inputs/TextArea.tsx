@@ -1,4 +1,10 @@
 import React, { useState, ChangeEvent } from "react";
+import {
+  ERROR_COLOUR,
+  ERROR_COLOUR_DIM,
+  NEUTRAL_COLOUR_DIM,
+  WARNING_COLOUR_DIM,
+} from "~/utils/consts";
 
 type TextAreaProps = {
   name: string;
@@ -18,7 +24,7 @@ export default function TextArea({
 }: TextAreaProps) {
   const [count, setCount] = useState<number>(0);
   const [countColourChange, setCountColourChange] =
-    useState<string>("text-[#3B3F40]/75");
+    useState<string>(NEUTRAL_COLOUR_DIM);
 
   const changeHandler = (e: ChangeEvent<HTMLInputElement>) => {
     // https://stackoverflow.com/questions/8666907/cant-get-textareas-scrollheight-when-delete-contents
@@ -31,11 +37,11 @@ export default function TextArea({
     setCount(numChars);
 
     if (percentFull >= 1) {
-      setCountColourChange("text-red-700/75");
+      setCountColourChange(ERROR_COLOUR_DIM);
     } else if (percentFull >= 0.75) {
-      setCountColourChange("text-yellow-600/75");
+      setCountColourChange(WARNING_COLOUR_DIM);
     } else {
-      setCountColourChange("text-[#3B3F40]/75");
+      setCountColourChange(NEUTRAL_COLOUR_DIM);
     }
   };
 
@@ -49,8 +55,8 @@ export default function TextArea({
         className={className}
         defaultValue={data}
       />
-      <p className="flex flex-row justify-end text-[#3B3F40]/75 text-xs">
-        {error ? <span className="text-red-700 mr-4">{error}</span> : null}
+      <p className={`flex flex-row justify-end ${NEUTRAL_COLOUR_DIM} text-xs`}>
+        {error ? <span className={`${ERROR_COLOUR} mr-4`}>{error}</span> : null}
         <span className={countColourChange}>{count}</span>/{maxLength}
       </p>
     </div>

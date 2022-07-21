@@ -1,8 +1,5 @@
 import { ActionFunction, redirect, json } from "remix";
-import {
-  THOUGHT_TEXT_LENGTH,
-  THOUGHT_TITLE_LENGTH,
-} from "~/components/Thoughts/consts";
+import { THOUGHT_TEXT_LENGTH, THOUGHT_TITLE_LENGTH } from "~/utils/consts";
 import { db } from "~/utils/db.server";
 import { getUserId } from "~/utils/session.server";
 

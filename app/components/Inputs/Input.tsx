@@ -1,6 +1,12 @@
 import React, { useState, ChangeEvent } from "react";
+import {
+  ERROR_COLOUR,
+  ERROR_COLOUR_DIM,
+  NEUTRAL_COLOUR_DIM,
+  WARNING_COLOUR_DIM,
+} from "~/utils/consts";
 
-interface InputProps {
+type InputProps = {
   name: string;
   maxLength: number;
   data: string | null;
@@ -8,7 +14,7 @@ interface InputProps {
   type?: string;
   placeholder?: string;
   className?: string;
-}
+};
 
 export default function Input({
   name,
@@ -21,7 +27,7 @@ export default function Input({
 }: InputProps) {
   const [count, setCount] = useState<number>(0);
   const [countColourChange, setCountColourChange] =
-    useState<string>("text-[#3B3F40]/75");
+    useState<string>(NEUTRAL_COLOUR_DIM);
 
   const keyHandler = (e: ChangeEvent<HTMLInputElement>) => {
     const numChars = e.target.value.length;
@@ -29,11 +35,11 @@ export default function Input({
     setCount(numChars);
 
     if (percentFull >= 1) {
-      setCountColourChange("text-red-700/75");
+      setCountColourChange(ERROR_COLOUR_DIM);
     } else if (percentFull >= 0.75) {
-      setCountColourChange("text-yellow-600/75");
+      setCountColourChange(WARNING_COLOUR_DIM);
     } else {
-      setCountColourChange("text-[#3B3F40]/75");
+      setCountColourChange(NEUTRAL_COLOUR_DIM);
     }
   };
 
@@ -48,8 +54,10 @@ export default function Input({
         maxLength={maxLength}
         className={className}
       />
-      <p className="flex flex-row text-[#3B3F40]/75 text-xs whitespace-nowrap">
-        <span className="text-red-700 mr-4">{error}</span>
+      <p
+        className={`flex flex-row ${NEUTRAL_COLOUR_DIM} text-xs whitespace-nowrap`}
+      >
+        <span className={`${ERROR_COLOUR} mr-4`}>{error}</span>
         <span className={countColourChange}>{count}</span>/{maxLength}
       </p>
     </div>

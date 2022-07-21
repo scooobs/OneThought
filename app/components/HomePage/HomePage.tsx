@@ -2,9 +2,9 @@ import React from "react";
 import { GetRandomThought } from "~/utils/thoughts.server";
 import RandomThought from "../Thoughts/RandomThought";
 
-interface HomePageProps {
+type HomePageProps = {
   randomThought?: GetRandomThought;
-}
+};
 
 export default function HomePage({ randomThought }: HomePageProps) {
   return (

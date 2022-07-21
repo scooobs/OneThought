@@ -4,10 +4,10 @@ import { getUser } from "~/utils/session.server";
 import LoggedIn from "../User/LoggedIn";
 import Login from "../User/Login";
 
-export interface NavbarProps {
+export type NavbarProps = {
   suffix: string;
   user?: Awaited<ReturnType<typeof getUser>>;
-}
+};
 
 export default function Navbar({ suffix, user = null }: NavbarProps) {
   return (

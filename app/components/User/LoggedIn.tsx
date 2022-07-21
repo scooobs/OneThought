@@ -2,15 +2,15 @@ import React, { useState } from "react";
 import { Form } from "remix";
 import { GetUserEnsured } from "~/utils/session.server";
 
-interface LoggedInProps {
+type LoggedInProps = {
   user: GetUserEnsured;
-}
+};
 
-interface HoverHandlerProps {
+type HoverHandlerProps = {
   handleMouseOver: () => void;
   handleMouseOut: () => void;
   children?: React.ReactNode;
-}
+};
 
 function HoverHandler({
   handleMouseOver,
@@ -29,10 +29,10 @@ function HoverHandler({
   );
 }
 
-interface LoggedInStateProps {
+type LoggedInStateProps = {
   isAdmin: boolean;
   userName: string;
-}
+};
 
 function LoggedInState({ isAdmin, userName }: LoggedInStateProps) {
   return (
