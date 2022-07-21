@@ -9,6 +9,20 @@ export const renderDate = (date: Date) => {
   return `${day}/${month < 10 ? `0${month}` : month}/${year}`;
 };
 
+export const renderViews = (views: number) => {
+  switch (true) {
+    case views < 1000: {
+      return views.toString();
+    }
+    case views < 10000: {
+      return `${Math.round(views / 1000, 2)}K`;
+    }
+    default: {
+      return views.toString();
+    }
+  }
+};
+
 export const renderName = (userName: string, isAdmin: boolean) => (
   // let colour = "sky-500";
   // if (user.isAdmin) {
