@@ -1,13 +1,13 @@
 import React from "react";
+import { renderName } from "~/utils/common";
 import { GetRandomThought } from "~/utils/thoughts.server";
-import { renderName } from "~/utils/user.common";
 
 import Thought from "./Thought";
 
-interface RandomThoughtProps {
+type RandomThoughtProps = {
   thought: GetRandomThought;
   className?: string;
-}
+};
 
 export default function RandomThought({
   thought,

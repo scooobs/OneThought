@@ -1,25 +1,11 @@
 import React from "react";
+import { renderDate, renderName, renderViews } from "~/utils/common";
 
 import { GetRandomThought } from "~/utils/thoughts.server";
-import { renderDate, renderName } from "~/utils/user.common";
 
-interface ThoughtProps {
+type ThoughtProps = {
   thought: GetRandomThought;
   className?: string;
-}
-
-const renderViews = (views: number) => {
-  switch (true) {
-    case views < 1000: {
-      return views.toString();
-    }
-    case views < 10000: {
-      return `${Math.round(views / 1000, 2)}K`;
-    }
-    default: {
-      return views.toString();
-    }
-  }
 };
 
 export default function Thought({ thought, className = "" }: ThoughtProps) {

@@ -1,16 +1,17 @@
 import React from "react";
+import { useLoaderData } from "remix";
+import { ProfilePageLoaderPayload } from "~/routes/user/$userName";
+import { renderDate, renderName } from "~/utils/common";
 
-import { GetUserByNameEnsured } from "~/utils/session.server";
-import { renderDate, renderName } from "~/utils/user.common";
+import EmptyThought from "../Thoughts/EmptyThought";
 
 import Thought from "../Thoughts/Thought";
 
-interface ProfilePageProps {
-  user: GetUserByNameEnsured | undefined;
-}
+export default function ProfilePage() {
+  const { requestedUser, isMyProfile, thoughtToday } =
+    useLoaderData<ProfilePageLoaderPayload>();
 
-export default function ProfilePage({ user }: ProfilePageProps) {
-  if (!user) {
+  if (!requestedUser) {
     return <div>User does not exist</div>;
   }
 
@@ -21,19 +22,23 @@ export default function ProfilePage({ user }: ProfilePageProps) {
           <div className="rounded-md pt-4 mr-6 sticky self-start top-0">
             <p className="px-2 text-sm  whitespace-nowrap">
               <strong>user: </strong>
-              {renderName(user.userName, user.isAdmin)}
+              {renderName(requestedUser.userName, requestedUser.isAdmin)}
             </p>
             <p className="px-2 text-sm  whitespace-nowrap">
               <strong>total thoughts: </strong>
-              {user.thoughts.length}
+              {requestedUser.thoughts.length}
             </p>
             <p className="px-2 text-sm  whitespace-nowrap">
               <strong>member since: </strong>
-              {renderDate(new Date(user.createdAt))}
+              {renderDate(new Date(requestedUser.createdAt))}
             </p>
           </div>
+
           <div>
-            {user.thoughts.map((thought) => (
+            {!thoughtToday && isMyProfile ? (
+              <EmptyThought user={requestedUser} className="mb-12" />
+            ) : null}
+            {requestedUser.thoughts.map((thought) => (
               <Thought className="mb-6" key={thought.id} thought={thought} />
             ))}
           </div>

@@ -127,6 +127,7 @@ export const getUserByName = async (userName: string) => {
       createdAt: true,
       thoughts: {
         select: {
+          id: true,
           user: true,
           thoughtNumber: true,
           views: true,

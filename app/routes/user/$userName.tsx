@@ -8,28 +8,42 @@ import {
   getUserByName,
   GetUserByNameEnsured,
 } from "~/utils/session.server";
+import {
+  getLatestThoughtNumber,
+  hasThoughtToday,
+} from "~/utils/thoughts.server";
 
-interface LoaderPayload {
+export type ProfilePageLoaderPayload = {
   user?: GetUser;
   requestedUser?: GetUserByNameEnsured;
+  latestThoughtNumber: number;
+  thoughtToday: boolean;
   isMyProfile: boolean;
-}
+};
 
 export const loader: LoaderFunction = async ({ params, request }) => {
-  const data: LoaderPayload = {};
+  const data: ProfilePageLoaderPayload = {};
+  data.latestThoughtNumber = 0;
   const requestedUserName = params.userName;
   const user = await getUser(request);
+  let thoughtToday = false;
   let isMyProfile = false;
 
   if (requestedUserName) {
     const requestedUser = await getUserByName(requestedUserName);
     if (requestedUser) {
+      const latestThoughtNumber = await getLatestThoughtNumber(
+        requestedUser.id
+      );
+      data.latestThoughtNumber = latestThoughtNumber;
       data.requestedUser = requestedUser;
     }
   }
 
   if (user) {
     data.user = user;
+    thoughtToday = await hasThoughtToday(user.id);
+    data.thoughtToday = thoughtToday;
     if (requestedUserName === user.userName) {
       isMyProfile = true;
     }
@@ -40,7 +54,7 @@ export const loader: LoaderFunction = async ({ params, request }) => {
 };
 
 export default function ProfileController() {
-  const data = useLoaderData<LoaderPayload>();
+  const data = useLoaderData<ProfilePageLoaderPayload>();
 
   return (
     <Layout
@@ -49,7 +63,7 @@ export default function ProfileController() {
       }`}
       user={data.user}
     >
-      <ProfilePage user={data.requestedUser} />
+      <ProfilePage />
     </Layout>
   );
 }
