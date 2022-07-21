@@ -14,12 +14,12 @@ model User {
   id       String @id @default(uuid())
   userName String @unique
 
-  isAdmin   Boolean @default(false)
+  isAdmin   Boolean   @default(false)
   password  String
   firstName String?
   lastName  String?
-
-  thoughts Thought[]
+  comments  Comment[]
+  thoughts  Thought[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -34,12 +34,37 @@ model Thought {
 
   title         String
   text          String
-  views         Int    @default(0)
+  views         Int       @default(0)
   thoughtNumber Int
+  comments      Comment[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
   @@unique([userId, thoughtNumber])
   @@map("thoughts")
+}
+
+// This model means that comments simply flow in a time-sorted manner
+// I think perhaps I want a model which caters for 2 level comments i.e.
+//
+//      View Comments --|
+//                      |-- Author replies
+// but that will require some more thinking about the schema
+
+model Comment {
+  id String @id @default(uuid())
+
+  thought   Thought @relation(fields: [thoughtId], references: [id])
+  thoughtId String
+
+  user   User   @relation(fields: [userId], references: [id])
+  userId String
+
+  text String
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("comments")
 }
